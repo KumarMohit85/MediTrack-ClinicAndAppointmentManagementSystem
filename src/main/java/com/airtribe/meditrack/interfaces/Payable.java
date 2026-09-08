@@ -1,5 +1,13 @@
 package com.airtribe.meditrack.interfaces;
 
-public interface Payable {
+import com.airtribe.meditrack.entity.Bill;
 
+public interface Payable {
+    Bill generateBill();
+
+    double calculateAmount();
+
+    double calculateTax(double amount);
+
+    String getPaymentDetails();
 }
