@@ -48,9 +48,13 @@ public class PatientService {
         return false;
     }
 
-    // overloaded: lookup by id vs filter by age
-    public Patient searchPatient(String id) {
-        return patients.get(id);
+    // overloaded: by id/name text vs by age
+    public List<Patient> searchPatient(String query) {
+        String needle = query == null ? "" : query.toLowerCase();
+        return patients.values().stream()
+                .filter(p -> p.getId().equalsIgnoreCase(query)
+                        || (p.getName() != null && p.getName().toLowerCase().contains(needle)))
+                .collect(Collectors.toList());
     }
 
     public List<Patient> searchPatient(int age) {
