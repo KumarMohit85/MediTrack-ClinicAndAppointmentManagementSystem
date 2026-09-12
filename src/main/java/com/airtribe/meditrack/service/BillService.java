@@ -9,7 +9,6 @@ import com.airtribe.meditrack.pattern.factory.BillType;
 import com.airtribe.meditrack.pattern.strategy.BillingStrategy;
 import com.airtribe.meditrack.util.IdGenerator;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class BillService {
@@ -21,7 +20,7 @@ public class BillService {
         double amount = strategy.calculateAmount(appointment);
 
         double tax = strategy.calculateTax(amount);
-        String billId= IdGenerator.generateBillId();
+        String billId = IdGenerator.getInstance().generateBillId();
 
         Bill bill = new Bill(billId, appointment);
 

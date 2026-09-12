@@ -1,0 +1,3 @@
+id,createdAt,name,age,phone,email,specialization,consultationFee,experienceYears
+DOC-001,2026-01-05 08:00,Dr John Doe,45,9876543210,john@example.com,CARDIOLOGY,500.0,15
+DOC-002,2026-01-06 08:30,Dr Jane Smith,40,9988776655,jane@example.com,DERMATOLOGY,1000.0,10
