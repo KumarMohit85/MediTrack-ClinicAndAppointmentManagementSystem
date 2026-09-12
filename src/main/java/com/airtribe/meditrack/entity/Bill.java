@@ -70,6 +70,10 @@ public class Bill extends MedicalEntity implements Payable {
         this.total = total;
     }
 
+    public void setGeneratedAt(LocalDateTime generatedAt) {
+    this.generatedAt = generatedAt;
+}
+
     @Override
     public Bill generateBill() {
         this.tax = calculateTax(calculateAmount());

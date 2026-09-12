@@ -1,0 +1,4 @@
+digraph G { rankdir=LR; graph [fontname="Arial", bgcolor="white"]; node [shape=box, style="rounded,filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial"]; edge [color="#52606d"];
+A [label="Appointment"]; B [label="Bill Type"]; F [label="BillFactory"]; S [label="Standard"]; P [label="Premium"]; I [label="Insurance"]; C [label="Calculate amount"]; T [label="Calculate tax"]; BIL [label="Bill"]; SUM [label="Immutable BillSummary"];
+A->B->F; F->S; F->P; F->I; S->C; P->C; I->C; C->T->BIL->SUM;
+}

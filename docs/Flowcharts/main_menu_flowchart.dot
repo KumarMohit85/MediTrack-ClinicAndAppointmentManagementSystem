@@ -1,0 +1,4 @@
+digraph G { rankdir=TB; graph [fontname="Arial", bgcolor="white"]; node [shape=box, style="rounded,filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial"]; edge [color="#52606d", fontname="Arial"];
+Start [shape=oval,label="Start"]; Init [label="Initialize services"] ; Load [shape=diamond,label="--loadData?"]; Read [label="Load CSV data"]; Menu [label="Display Main Menu"]; Choice [shape=diamond,label="Select operation"]; PM [label="Patient Management"]; DM [label="Doctor Management"]; AM [label="Appointment Management"]; BM [label="Billing"]; AI [label="Recommendation"]; AN [label="Analytics"]; Exit [label="Exit / cleanup"]; End [shape=oval,label="End"];
+Start->Init->Load; Load->Read [label="yes"]; Load->Menu [label="no"]; Read->Menu; Menu->Choice; Choice->PM; Choice->DM; Choice->AM; Choice->BM; Choice->AI; Choice->AN; Choice->Exit; PM->Menu; DM->Menu; AM->Menu; BM->Menu; AI->Menu; AN->Menu; Exit->End;
+}

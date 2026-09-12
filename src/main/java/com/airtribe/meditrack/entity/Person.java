@@ -59,7 +59,7 @@ public abstract class Person extends MedicalEntity {
     }
 
     public String getDetails() {
-        return "Name: " + name + ", Age: " + age + ", Phone: " + phone + ", Email: " + email;
+        return "ID: " + getId() + ", Name: " + name + ", Age: " + age + ", Phone: " + phone + ", Email: " + email;
     }
 
 }

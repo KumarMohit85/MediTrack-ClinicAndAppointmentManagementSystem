@@ -1,3 +1,4 @@
 appointmentId,patientId,doctorId,status,appointmentDate,notes
 APT-001,PAT-001,DOC-001,CONFIRMED,2026-09-20 11:00,Regular checkup
 APT-002,PAT-002,DOC-002,PENDING,2026-09-22 15:30,Skin allergy
+APT-003,PAT-003,DOC-003,PENDING,2026-12-07 12:00,need good treatment

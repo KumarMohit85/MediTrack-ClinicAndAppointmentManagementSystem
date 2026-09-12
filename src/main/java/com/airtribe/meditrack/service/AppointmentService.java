@@ -71,6 +71,23 @@ public class AppointmentService {
         return appointment;
     }
 
+    public void restoreAppointment(Appointment appointment) {
+    if (appointment == null) {
+        return;
+    }
+
+    if (appointment.getAppointmentId() == null
+            || appointment.getAppointmentId().isBlank()) {
+        return;
+    }
+
+    if (appointmentStore.exists(appointment.getAppointmentId())) {
+        return;
+    }
+
+    appointmentStore.add(appointment);
+}
+
     public Appointment getAppointmentById(String id) {
         Appointment appointment = appointmentStore.getById(id);
         if (appointment == null) {

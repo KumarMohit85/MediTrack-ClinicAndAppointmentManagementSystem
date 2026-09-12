@@ -1,0 +1,4 @@
+digraph G { rankdir=TB; graph [fontname="Arial", bgcolor="white"]; node [shape=box, style="rounded,filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial"]; edge [color="#52606d"];
+A [label="Create appointment"]; B [label="Find patient"]; C [shape=diamond,label="Patient exists?"]; D [label="Find doctor"]; E [shape=diamond,label="Doctor exists?"]; F [label="Enter date/time + notes"]; G [shape=diamond,label="Valid input?"]; H [label="Create PENDING appointment"]; I [label="Store appointment"]; J [shape=diamond,label="Later action?"]; K [label="CONFIRMED"]; L [label="CANCELLED"]; M [label="COMPLETED"]; X [label="Show error / return"];
+A->B->C; C->D [label="yes"]; C->X [label="no"]; D->E; E->F [label="yes"]; E->X [label="no"]; F->G; G->H [label="yes"]; G->X [label="no"]; H->I->J; J->K [label="confirm"]; J->L [label="cancel"]; J->M [label="complete"];
+}

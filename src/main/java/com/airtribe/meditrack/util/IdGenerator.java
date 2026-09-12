@@ -32,4 +32,31 @@ public class IdGenerator {
     public String generateBillId() {
         return String.format("BILL-%03d", billCounter.getAndIncrement());
     }
+
+    public void observeExistingId(String id) {
+        if (id == null || id.trim().isEmpty()) {
+            return;
+        }
+
+        if (id.startsWith("PAT-")) {
+            updateCounter(patientCounter, id);
+        } else if (id.startsWith("DOC-")) {
+            updateCounter(doctorCounter, id);
+        } else if (id.startsWith("APT-")) {
+            updateCounter(appointmentCounter, id);
+        } else if (id.startsWith("BILL-")) {
+            updateCounter(billCounter, id);
+        }
+    }
+
+    private void updateCounter(AtomicInteger counter, String id) {
+        try {
+            int dashIndex = id.indexOf('-');
+            int number = Integer.parseInt(id.substring(dashIndex + 1));
+
+            counter.updateAndGet(current -> Math.max(current, number + 1));
+        } catch (NumberFormatException e) {
+            // Ignore invalid IDs.
+        }
+    }
 }

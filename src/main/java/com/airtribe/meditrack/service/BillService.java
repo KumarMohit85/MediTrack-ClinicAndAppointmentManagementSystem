@@ -51,4 +51,20 @@ public class BillService {
     public BillSummary getBillSummary(String billId) {
         return getBillById(billId).getSummary();
     }
+
+    public void restoreBill(Bill bill) {
+    if (bill == null) {
+        return;
+    }
+
+    if (bill.getBillId() == null || bill.getBillId().isBlank()) {
+        return;
+    }
+
+    if (billStore.exists(bill.getBillId())) {
+        return;
+    }
+
+    billStore.add(bill);
+}
 }
