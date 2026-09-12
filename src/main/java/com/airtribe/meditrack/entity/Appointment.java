@@ -3,30 +3,24 @@ package com.airtribe.meditrack.entity;
 import java.time.LocalDateTime;
 
 public class Appointment extends MedicalEntity implements Cloneable {
-    private String appointmentId;
     private Patient patient;
     private Doctor doctor;
-    private AppointmentStatus appointmentStatus;
+    private AppointmentStatus status;
     private LocalDateTime appointmentDate;
     private String notes;
 
-    public Appointment(String appointmentId, Patient patient, Doctor doctor, AppointmentStatus appointmentStatus,
+    public Appointment(String appointmentId, Patient patient, Doctor doctor, AppointmentStatus status,
             LocalDateTime appointmentDate, String notes) {
         super(appointmentId, LocalDateTime.now());
-        this.appointmentId = appointmentId;
         this.patient = patient;
         this.doctor = doctor;
-        this.appointmentStatus = appointmentStatus;
+        this.status = status;
         this.appointmentDate = appointmentDate;
         this.notes = notes;
     }
 
     public String getAppointmentId() {
-        return appointmentId;
-    }
-
-    public String getId() {
-        return appointmentId;
+        return getId();
     }
 
     public Patient getPatient() {
@@ -38,11 +32,11 @@ public class Appointment extends MedicalEntity implements Cloneable {
     }
 
     public AppointmentStatus getAppointmentStatus() {
-        return appointmentStatus;
+        return status;
     }
 
     public AppointmentStatus getStatus() {
-        return appointmentStatus;
+        return status;
     }
 
     public LocalDateTime getAppointmentDate() {
@@ -54,7 +48,7 @@ public class Appointment extends MedicalEntity implements Cloneable {
     }
 
     public void setAppointmentId(String appointmentId) {
-        this.appointmentId = appointmentId;
+        setId(appointmentId);
     }
 
     public void setPatient(Patient patient) {
@@ -65,8 +59,12 @@ public class Appointment extends MedicalEntity implements Cloneable {
         this.doctor = doctor;
     }
 
-    public void setAppointmentStatus(AppointmentStatus appointmentStatus) {
-        this.appointmentStatus = appointmentStatus;
+    public void setAppointmentStatus(AppointmentStatus status) {
+        this.status = status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
     }
 
     public void setAppointmentDate(LocalDateTime appointmentDate) {
@@ -78,23 +76,23 @@ public class Appointment extends MedicalEntity implements Cloneable {
     }
 
     public String getDetails() {
-        return "Appointment ID: " + appointmentId + ", Patient: " + (patient != null ? patient.getName() : "N/A")
+        return "Appointment ID: " + getId() + ", Patient: " + (patient != null ? patient.getName() : "N/A")
                 + ", Doctor: " + (doctor != null ? doctor.getName() : "N/A")
-                + ", Appointment Status: " + appointmentStatus + ", Appointment Date: " + appointmentDate
+                + ", Appointment Status: " + status + ", Appointment Date: " + appointmentDate
                 + ", Notes: " + notes;
     }
 
     public void cancel() {
-        if (appointmentStatus == AppointmentStatus.PENDING) {
-            appointmentStatus = AppointmentStatus.CANCELLED;
+        if (status == AppointmentStatus.PENDING) {
+            status = AppointmentStatus.CANCELLED;
         } else {
             System.out.println("Appointment is not pending");
         }
     }
 
     public void confirm() {
-        if (appointmentStatus == AppointmentStatus.PENDING) {
-            appointmentStatus = AppointmentStatus.CONFIRMED;
+        if (status == AppointmentStatus.PENDING) {
+            status = AppointmentStatus.CONFIRMED;
         } else {
             System.out.println("Appointment is not pending");
         }

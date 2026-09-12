@@ -8,5 +8,9 @@ public interface BillingStrategy {
 
     double calculateTax(double amount);
 
+    default double calculateTotal(double amount) {
+        return amount + calculateTax(amount);
+    }
+
     String getStrategyName();
 }

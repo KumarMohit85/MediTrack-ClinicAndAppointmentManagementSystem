@@ -2,12 +2,12 @@ package com.airtribe.meditrack.entity;
 
 import java.time.LocalDateTime;
 
-public class BillSummary {
-    private String billId;
-    private double subtotal;
-    private double tax;
-    private double total;
-    private LocalDateTime generatedAt;
+public final class BillSummary {
+    private final String billId;
+    private final double subtotal;
+    private final double tax;
+    private final double total;
+    private final LocalDateTime generatedAt;
 
     public BillSummary(String billId, double subtotal, double tax, double total, LocalDateTime generatedAt) {
         this.billId = billId;
@@ -37,4 +37,9 @@ public class BillSummary {
         return generatedAt;
     }
 
+    @Override
+    public String toString() {
+        return "BillSummary{billId='" + billId + "', subtotal=" + subtotal
+                + ", tax=" + tax + ", total=" + total + ", generatedAt=" + generatedAt + "}";
+    }
 }
