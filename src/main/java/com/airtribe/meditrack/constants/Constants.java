@@ -13,6 +13,7 @@ public final class Constants {
     public static final String PATIENTS_CSV_PATH = "data/patients.csv";
     public static final String DOCTORS_CSV_PATH = "data/doctors.csv";
     public static final String APPOINTMENTS_CSV_PATH = "data/appointments.csv";
+    public static final String BILLS_CSV_PATH = "data/bills.csv";
 
     public static final int MENU_EXIT = 0;
     public static final int MENU_DOCTOR = 1;

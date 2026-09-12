@@ -2,6 +2,8 @@ package com.airtribe.meditrack.entity;
 
 import java.time.LocalDateTime;
 
+import com.airtribe.meditrack.util.DateUtil;
+
 public class Appointment extends MedicalEntity implements Cloneable {
     private Patient patient;
     private Doctor doctor;
@@ -78,7 +80,7 @@ public class Appointment extends MedicalEntity implements Cloneable {
     public String getDetails() {
         return "Appointment ID: " + getId() + ", Patient: " + (patient != null ? patient.getName() : "N/A")
                 + ", Doctor: " + (doctor != null ? doctor.getName() : "N/A")
-                + ", Appointment Status: " + status + ", Appointment Date: " + appointmentDate
+                + ", Appointment Status: " + status + ", Appointment Date: " + DateUtil.formatDateTime(appointmentDate)
                 + ", Notes: " + notes;
     }
 

@@ -1,0 +1,8 @@
+digraph G { rankdir=TB; graph [fontname="Arial", bgcolor="white", nodesep=.35, ranksep=.55]; node [shape=box, style="rounded,filled", fillcolor="#eef3f8", color="#52606d", fontname="Arial"]; edge [color="#52606d"];
+UI [label="Presentation / CLI\nMain + Menu"];
+S [label="Service Layer\nPatientService | DoctorService | AppointmentService | BillService"];
+E [label="Entity Layer\nPerson | Patient | Doctor | Appointment | Bill | BillSummary"];
+U [label="Utilities & Patterns\nValidator | DateUtil | CSVUtil | DataStore | IdGenerator | AIHelper\nFactory | Strategy"];
+P [label="Persistence\nCSV files (when enabled)"];
+UI -> S -> E; S -> U; U -> P; U -> E;
+}

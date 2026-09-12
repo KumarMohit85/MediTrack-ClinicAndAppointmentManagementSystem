@@ -1,0 +1,4 @@
+digraph G { rankdir=LR; graph [fontname="Arial", bgcolor="white"]; node [shape=box, style="rounded,filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial"]; edge [color="#52606d"];
+BS [label="BillService"]; F [label="BillFactory"]; I [label="BillingStrategy\n<<interface>>"]; S [label="StandardBillingStrategy"]; P [label="PremiumBillingStrategy"]; Ins [label="InsuranceBillingStrategy"]; B [label="Bill"];
+BS->F [label="create/select"]; F->I [label="returns"]; I->S; I->P; I->Ins; BS->B [label="build bill"];
+}

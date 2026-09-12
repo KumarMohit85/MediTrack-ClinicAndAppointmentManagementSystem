@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.airtribe.meditrack.entity.Appointment;
 import com.airtribe.meditrack.entity.AppointmentStatus;
+import com.airtribe.meditrack.entity.Bill;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.entity.Specialization;
@@ -225,4 +226,60 @@ public class CSVUtil {
                 parts[5].trim());
         return appointment;
     }
+
+    public static void saveBills(List<Bill> bills, String path) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
+            writer.write("billId,appointmentId,amount,tax,total,generatedAt");
+            writer.newLine();
+
+            for (int i = 0; i < bills.size(); i++) {
+                Bill bill = bills.get(i);
+
+                String appointmentId = "";
+
+                if (bill.getAppointment() != null) {
+                    appointmentId = bill.getAppointment().getAppointmentId();
+                }
+
+                String generatedAt = "";
+
+                if (bill.getGeneratedAt() != null) {
+                    generatedAt = DateUtil.formatDateTime(bill.getGeneratedAt());
+                }
+
+                String line = bill.getBillId() + ","
+                        + appointmentId + ","
+                        + bill.getAmount() + ","
+                        + bill.getTax() + ","
+                        + bill.getTotal() + ","
+                        + generatedAt;
+
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            throw new InvalidDataException("Could not save bills");
+        }
+    }
+
+    public static List<String[]> loadBillRows(String path) {
+        List<String[]> rows = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            reader.readLine();
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    rows.add(line.split(","));
+                }
+            }
+        } catch (IOException e) {
+            throw new InvalidDataException("Could not load bills");
+        }
+
+        return rows;
+    }
+    
 }

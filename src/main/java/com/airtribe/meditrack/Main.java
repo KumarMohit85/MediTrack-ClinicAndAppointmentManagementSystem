@@ -18,7 +18,7 @@ import com.airtribe.meditrack.service.AppointmentService;
 import com.airtribe.meditrack.service.BillService;
 import com.airtribe.meditrack.service.DoctorService;
 import com.airtribe.meditrack.service.PatientService;
-import com.airtribe.meditrack.util.CSVUtil;
+import com.airtribe.meditrack.util.PersistenceManager;
 import com.airtribe.meditrack.util.DateUtil;
 
 public class Main {
@@ -264,42 +264,42 @@ public class Main {
         }
     }
 
-    private void loadData() {
-        List<Patient> patients = CSVUtil.loadPatients(Constants.PATIENTS_CSV_PATH);
-        List<Doctor> doctors = CSVUtil.loadDoctors(Constants.DOCTORS_CSV_PATH);
-        List<Appointment> appointments = CSVUtil.loadAppointments(Constants.APPOINTMENTS_CSV_PATH);
+private void loadData() {
+    PersistenceManager.loadAll(
+            patientService,
+            doctorService,
+            appointmentService,
+            billService);
 
-        for (int i = 0; i < patients.size(); i++) {
-            patientService.addPatient(patients.get(i));
-        }
-        for (int i = 0; i < doctors.size(); i++) {
-            doctorService.addDoctor(doctors.get(i));
-        }
-        for (int i = 0; i < appointments.size(); i++) {
-            Appointment loaded = appointments.get(i);
-            Patient patient = patientService.getPatientById(loaded.getPatient().getId());
-            Doctor doctor = doctorService.getDoctorById(loaded.getDoctor().getId());
-            loaded.setPatient(patient);
-            loaded.setDoctor(doctor);
-            appointmentService.createAppointment(
-                    loaded.getPatient().getId(),
-                    loaded.getDoctor().getId(),
-                    loaded.getAppointmentDate(),
-                    loaded.getNotes());
-        }
+    System.out.println("Loaded patients: "
+            + patientService.getAllPatients().size());
 
-        System.out.println("Loaded patients: " + patientService.getAllPatients().size());
-        System.out.println("Loaded doctors: " + doctorService.getAllDoctors().size());
-        System.out.println("Loaded appointments: " + appointmentService.getAllAppointments().size());
+    System.out.println("Loaded doctors: "
+            + doctorService.getAllDoctors().size());
+
+    System.out.println("Loaded appointments: "
+            + appointmentService.getAllAppointments().size());
+
+    System.out.println("Loaded bills: "
+            + billService.getAllBills().size());
+}
+
+private void exitApplication() {
+    PersistenceManager.saveAll(
+            patientService,
+            doctorService,
+            appointmentService,
+            billService);
+
+    System.out.println("Data saved successfully.");
+    System.out.println("Exiting MediTrack.");
+
+    running = false;
+
+    if (scanner != null) {
+        scanner.close();
     }
-
-    private void exitApplication() {
-        System.out.println("Exiting MediTrack.");
-        running = false;
-        if (scanner != null) {
-            scanner.close();
-        }
-    }
+}
 
     private Doctor readDoctor(String id) {
         String name = readLine("Name: ");

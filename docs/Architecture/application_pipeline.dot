@@ -1,0 +1,3 @@
+digraph G { rankdir=LR; graph [fontname="Arial", bgcolor="white"]; node [shape=box, style="rounded,filled", fillcolor="#eef3f8", color="#52606d", fontname="Arial"]; edge [color="#52606d", fontname="Arial"];
+A [label="User Input"]; B [label="CLI / Menu"]; C [label="Service"]; D [label="Entity / Pattern"]; E [label="Result"]; F [label="Display"]; A->B->C->D->E->F;
+}

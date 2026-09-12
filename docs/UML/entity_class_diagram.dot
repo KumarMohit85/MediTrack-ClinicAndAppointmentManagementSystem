@@ -1,0 +1,10 @@
+digraph G { rankdir=TB; graph [fontname="Arial", bgcolor="white", nodesep=.3, ranksep=.45]; node [shape=record, style="filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial", fontsize=10]; edge [color="#52606d"];
+ME [label="{MedicalEntity|id : String\lcreatedAt : LocalDateTime\l}"];
+P [label="{Person|name : String\lage : int\lphone : String\lemail : String\l}"];
+Doc [label="{Doctor|specialization : Specialization\lconsultationFee : double\lexperienceYears : int\l}"];
+Pat [label="{Patient|medicalHistory : List<String>\lemergencyContact : String\lbloodGroup : String\l}"];
+Ap [label="{Appointment|appointmentId : String\lpatient : Patient\ldoctor : Doctor\lstatus : AppointmentStatus\ldate : LocalDateTime\l}"];
+Bill [label="{Bill|id : String\lamount : double\ltax : double\ltotal : double\l}"];
+Sum [label="{BillSummary (immutable)|billId : String\lsubtotal : double\ltax : double\ltotal : double\l}"];
+ME->P [arrowhead=empty]; P->Doc [arrowhead=empty]; P->Pat [arrowhead=empty]; Ap->Pat [label="patient"]; Ap->Doc [label="doctor"]; Bill->Ap [label="appointment"]; Sum->Bill [style=dashed,label="summary"];
+}

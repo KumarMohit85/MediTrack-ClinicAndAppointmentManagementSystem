@@ -1,0 +1,8 @@
+digraph G { rankdir=LR; graph [fontname="Arial", bgcolor="white"]; node [shape=record, style="filled", fillcolor="#f7f9fb", color="#52606d", fontname="Arial", fontsize=10]; edge [color="#52606d"];
+PS [label="{PatientService|add/get/update/delete\lsearchPatient(String)\lsearchPatient(int)}"];
+DS [label="{DoctorService|add/get/update/delete\lsearch\lfilter specialization\lsort by fee\laverage fee}"];
+AS [label="{AppointmentService|create/get/cancel/confirm/complete}"];
+BS [label="{BillService|generateBill\lgetBillById\lgetBillSummary}"];
+Pat [label="Patient"]; Doc [label="Doctor"]; Ap [label="Appointment"]; Bill [label="Bill"];
+PS->Pat; DS->Doc; AS->Ap; BS->Bill;
+}
