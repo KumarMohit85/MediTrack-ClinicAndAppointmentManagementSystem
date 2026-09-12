@@ -20,6 +20,14 @@ public abstract class MedicalEntity {
         return createdAt;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -31,5 +39,10 @@ public abstract class MedicalEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[id=" + id + ", createdAt=" + createdAt + "]";
     }
 }

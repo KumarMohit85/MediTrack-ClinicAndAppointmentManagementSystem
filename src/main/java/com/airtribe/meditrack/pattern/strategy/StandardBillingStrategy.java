@@ -7,7 +7,7 @@ public class StandardBillingStrategy implements BillingStrategy {
 
     @Override
     public double calculateAmount(Appointment appointment) {
-        return appointment.getDoctor().getConsultationFee() ;
+        return appointment.getDoctor().getConsultationFee();
     }
 
     @Override

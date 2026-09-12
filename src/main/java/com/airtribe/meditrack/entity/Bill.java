@@ -5,8 +5,7 @@ import com.airtribe.meditrack.interfaces.Payable;
 
 import java.time.LocalDateTime;
 
-public class Bill implements Payable {
-    private String id;
+public class Bill extends MedicalEntity implements Payable {
     private Appointment appointment;
     private double amount;
     private double tax;
@@ -14,13 +13,12 @@ public class Bill implements Payable {
     private LocalDateTime generatedAt;
 
     public Bill(String id, Appointment appointment) {
-        this.id = id;
+        super(id, LocalDateTime.now());
         this.appointment = appointment;
-
     }
 
     public String getBillId() {
-        return id;
+        return getId();
     }
 
     public Appointment getAppointment() {
@@ -38,14 +36,28 @@ public class Bill implements Payable {
     public double getTotal() {
         return total;
     }
+
     public LocalDateTime getGeneratedAt() {
         return generatedAt;
     }
 
+    public double calculateAmount() {
+        return amount;
+    }
+
+    public double calculateTax(double amount) {
+        return amount * Constants.TAX_RATE;
+    }
+
+    public BillSummary getSummary() {
+        return new BillSummary(getBillId(), this.amount, tax, total, generatedAt);
+    }
+
     public String getDetails() {
-        return "Bill ID: " + id + ", Appointment: " + appointment.getAppointmentId() + ", Amount: " + amount
+        return "Bill ID: " + getId() + ", Appointment: " + appointment.getAppointmentId() + ", Amount: " + amount
                 + ", Tax: " + tax + ", Total: " + total;
     }
+
     public void setAmount(double amount) {
         this.amount = amount;
     }
@@ -57,8 +69,10 @@ public class Bill implements Payable {
     public void setTotal(double total) {
         this.total = total;
     }
+
     @Override
     public Bill generateBill() {
+        this.tax = calculateTax(calculateAmount());
         this.total = this.amount + this.tax;
         this.generatedAt = LocalDateTime.now();
         return this;
@@ -67,7 +81,7 @@ public class Bill implements Payable {
 
     @Override
     public String getPaymentDetails() {
-        return "Bill ID: " + id + ", Appointment: " + appointment.getAppointmentId() + ", Amount: " + amount
+        return "Bill ID: " + getId() + ", Appointment: " + appointment.getAppointmentId() + ", Amount: " + amount
                 + ", Tax: " + tax + ", Total: " + total;
     }
 }

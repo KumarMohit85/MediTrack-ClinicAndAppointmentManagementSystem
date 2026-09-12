@@ -1,77 +1,75 @@
 package com.airtribe.meditrack.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.airtribe.meditrack.entity.Patient;
+import com.airtribe.meditrack.util.DataStore;
+import com.airtribe.meditrack.util.IdGenerator;
+import com.airtribe.meditrack.util.Validator;
 
 public class PatientService {
 
-    private final Map<String, Patient> patients = new HashMap<>();
+    private final DataStore<Patient> patientStore = new DataStore<>();
+    private final IdGenerator idGenerator = IdGenerator.getInstance();
 
-    public boolean addPatient(Patient patient) {
-        if (patient == null || patient.getId() == null || patients.containsKey(patient.getId())) {
-            return false;
+    public void addPatient(Patient patient) {
+        if (patient == null) {
+            return;
         }
-        patients.put(patient.getId(), patient);
-        return true;
+        if (patient.getId() == null || patient.getId().isBlank()) {
+            patient.setId(idGenerator.generatePatientId());
+        }
+        if (patientStore.exists(patient.getId())) {
+            return;
+        }
+        Validator.validatePatient(patient);
+        patientStore.add(patient);
     }
 
     public Patient getPatientById(String id) {
-        return patients.get(id);
+        return patientStore.getById(id);
     }
 
     public List<Patient> getAllPatients() {
-        return new ArrayList<>(patients.values());
+        return patientStore.getAll();
     }
 
-    public boolean updatePatient(Patient patient) {
-        if (patient == null || !patients.containsKey(patient.getId())) {
-            return false;
+    public void updatePatient(Patient patient) {
+        if (patient == null || !patientStore.exists(patient.getId())) {
+            return;
         }
-        patients.put(patient.getId(), patient);
-        return true;
+        Validator.validatePatient(patient);
+        patientStore.update(patient);
     }
 
-    public boolean deletePatient(String id) {
-        Iterator<Patient> it = patients.values().iterator();
-        while (it.hasNext()) {
-            if (it.next().getId().equals(id)) {
-                it.remove();
-                return true;
-            }
-        }
-        return false;
+    public void deletePatient(String id) {
+        patientStore.delete(id);
     }
 
-    // overloaded: by id/name text vs by age
-    public List<Patient> searchPatient(String query) {
-        String needle = query == null ? "" : query.toLowerCase();
-        return patients.values().stream()
-                .filter(p -> p.getId().equalsIgnoreCase(query)
-                        || (p.getName() != null && p.getName().toLowerCase().contains(needle)))
+    public List<Patient> searchPatient(String name) {
+        String needle = name == null ? "" : name.toLowerCase();
+        return patientStore.getAll().stream()
+                .filter(p -> p.getId().equalsIgnoreCase(name)
+                        || p.matches(needle))
                 .collect(Collectors.toList());
     }
 
     public List<Patient> searchPatient(int age) {
-        return patients.values().stream()
+        return patientStore.getAll().stream()
                 .filter(p -> p.getAge() == age)
                 .collect(Collectors.toList());
     }
 
-    public List<Patient> findPatientsByName(String name) {
-        String needle = name.toLowerCase();
-        return patients.values().stream()
+    public List<Patient> findPatientsByName(String keyword) {
+        String needle = keyword == null ? "" : keyword.toLowerCase();
+        return patientStore.getAll().stream()
                 .filter(p -> p.getName() != null && p.getName().toLowerCase().contains(needle))
                 .collect(Collectors.toList());
     }
 
     public List<Patient> getPatientsByAgeRange(int minAge, int maxAge) {
-        return patients.values().stream()
+        return patientStore.getAll().stream()
                 .filter(p -> p.getAge() >= minAge && p.getAge() <= maxAge)
                 .collect(Collectors.toList());
     }
