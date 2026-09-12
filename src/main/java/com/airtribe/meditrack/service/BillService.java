@@ -1,74 +1,54 @@
 package com.airtribe.meditrack.service;
 
+import java.util.List;
+
 import com.airtribe.meditrack.entity.Appointment;
 import com.airtribe.meditrack.entity.Bill;
 import com.airtribe.meditrack.entity.BillSummary;
 import com.airtribe.meditrack.exception.BillNotFoundException;
 import com.airtribe.meditrack.pattern.factory.BillFactory;
 import com.airtribe.meditrack.pattern.factory.BillType;
-import com.airtribe.meditrack.pattern.strategy.BillingStrategy;
+import com.airtribe.meditrack.util.DataStore;
 import com.airtribe.meditrack.util.IdGenerator;
-
-import java.util.*;
+import com.airtribe.meditrack.util.Validator;
 
 public class BillService {
-    private final List<Bill> bills = new ArrayList<>();
-    public Bill generateBill(Appointment appointment, BillType billType) {
 
-        BillingStrategy strategy = BillFactory.createStrategy(billType);
+    private final DataStore<Bill> billStore = new DataStore<>();
+    private final IdGenerator idGenerator = IdGenerator.getInstance();
+    private final BillFactory billFactory = new BillFactory();
 
-        double amount = strategy.calculateAmount(appointment);
-
-        double tax = strategy.calculateTax(amount);
-        String billId = IdGenerator.getInstance().generateBillId();
-
-        Bill bill = new Bill(billId, appointment);
-
-
-        bill.setAmount(amount);
-        bill.setTax(tax);
-
-        bill.generateBill();
-        bills.add(bill);
+    public Bill generateBill(Appointment appointment, BillType type) {
+        Bill bill = billFactory.createBill(appointment, type);
+        bill.setId(idGenerator.generateBillId());
+        Validator.validateBill(bill);
+        billStore.add(bill);
         return bill;
     }
-    public Bill getBillById(String billId) {
 
-        for (Bill bill : bills) {
-            if (bill.getBillId().equals(billId)) {
-                return bill;
-            }
+    public Bill getBillById(String id) {
+        Bill bill = billStore.getById(id);
+        if (bill == null) {
+            throw new BillNotFoundException("No bill found with ID: " + id);
         }
-
-        throw new BillNotFoundException("No bill found with ID: " + billId);
+        return bill;
     }
 
     public List<Bill> getAllBills() {
-        return new ArrayList<>(bills);
+        return billStore.getAll();
     }
 
-    public Bill getBillByAppointment(Appointment appointment) {
-
-        for (Bill bill : bills) {
-            if (bill.getAppointment().equals(appointment)) {
+    public Bill getBillByAppointment(String appointmentId) {
+        for (Bill bill : billStore.getAll()) {
+            if (bill.getAppointment() != null
+                    && bill.getAppointment().getAppointmentId().equals(appointmentId)) {
                 return bill;
             }
         }
-
-        throw new BillNotFoundException("No bill found for appointment: " + appointment.getAppointmentId());
+        throw new BillNotFoundException("No bill found for appointment: " + appointmentId);
     }
 
     public BillSummary getBillSummary(String billId) {
-
-        Bill bill = getBillById(billId);
-
-        return new BillSummary(
-                bill.getBillId(),
-                bill.getAmount(),
-                bill.getTax(),
-                bill.getTotal(),
-                bill.getGeneratedAt()
-        );
+        return getBillById(billId).getSummary();
     }
-
 }

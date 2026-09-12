@@ -1,5 +1,7 @@
 package com.airtribe.meditrack.pattern.factory;
 
+import com.airtribe.meditrack.entity.Appointment;
+import com.airtribe.meditrack.entity.Bill;
 import com.airtribe.meditrack.pattern.strategy.BillingStrategy;
 import com.airtribe.meditrack.pattern.strategy.InsuranceBillingStrategy;
 import com.airtribe.meditrack.pattern.strategy.PremiumBillingStrategy;
@@ -22,4 +24,10 @@ public class BillFactory {
         }
     }
 
+    public Bill createBill(Appointment appointment, BillType type) {
+        BillingStrategy strategy = createStrategy(type);
+        Bill bill = new Bill("", appointment);
+        bill.setAmount(strategy.calculateAmount(appointment));
+        return bill.generateBill();
+    }
 }

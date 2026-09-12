@@ -1,8 +1,6 @@
 package com.airtribe.meditrack.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,14 +10,17 @@ import com.airtribe.meditrack.entity.AppointmentStatus;
 import com.airtribe.meditrack.entity.Doctor;
 import com.airtribe.meditrack.entity.Patient;
 import com.airtribe.meditrack.exception.AppointmentNotFoundException;
+import com.airtribe.meditrack.util.DataStore;
 import com.airtribe.meditrack.util.DateUtil;
+import com.airtribe.meditrack.util.IdGenerator;
+import com.airtribe.meditrack.util.Validator;
 
 public class AppointmentService {
 
-    private final Map<String, Appointment> appointments = new HashMap<>();
-    private PatientService patientService;
+    private final DataStore<Appointment> appointmentStore = new DataStore<>();
     private DoctorService doctorService;
-    private int appointmentCounter = 1;
+    private PatientService patientService;
+    private final IdGenerator idGenerator = IdGenerator.getInstance();
 
     public AppointmentService() {
     }
@@ -35,6 +36,10 @@ public class AppointmentService {
 
     public void setDoctorService(DoctorService doctorService) {
         this.doctorService = doctorService;
+    }
+
+    public Appointment createAppointment(String patientId, String doctorId, LocalDateTime date) {
+        return createAppointment(patientId, doctorId, date, null);
     }
 
     public Appointment createAppointment(String patientId, String doctorId, LocalDateTime appointmentDate, String notes) {
@@ -59,14 +64,15 @@ public class AppointmentService {
         Patient patient = patientService != null ? patientService.getPatientById(patientId) : null;
         Doctor doctor = doctorService != null ? doctorService.getDoctorById(doctorId) : null;
 
-        String appointmentId = String.format("APT-%03d", appointmentCounter++);
+        String appointmentId = idGenerator.generateAppointmentId();
         Appointment appointment = new Appointment(appointmentId, patient, doctor, AppointmentStatus.PENDING, appointmentDate, notes);
-        appointments.put(appointmentId, appointment);
+        Validator.validateAppointment(appointment);
+        appointmentStore.add(appointment);
         return appointment;
     }
 
     public Appointment getAppointmentById(String id) {
-        Appointment appointment = appointments.get(id);
+        Appointment appointment = appointmentStore.getById(id);
         if (appointment == null) {
             throw new AppointmentNotFoundException("Appointment not found with ID: " + id);
         }
@@ -74,19 +80,17 @@ public class AppointmentService {
     }
 
     public List<Appointment> getAllAppointments() {
-        return new ArrayList<>(appointments.values());
+        return appointmentStore.getAll();
     }
 
-    public boolean confirmAppointment(String id) {
+    public void confirmAppointment(String id) {
         Appointment appointment = getAppointmentById(id);
         appointment.confirm();
-        return appointment.getStatus() == AppointmentStatus.CONFIRMED;
     }
 
-    public boolean cancelAppointment(String id) {
+    public void cancelAppointment(String id) {
         Appointment appointment = getAppointmentById(id);
         appointment.cancel();
-        return appointment.getStatus() == AppointmentStatus.CANCELLED;
     }
 
     public boolean completeAppointment(String id) {
@@ -96,19 +100,19 @@ public class AppointmentService {
     }
 
     public List<Appointment> getAppointmentsByPatient(String patientId) {
-        return appointments.values().stream()
+        return appointmentStore.getAll().stream()
                 .filter(a -> a.getPatient() != null && a.getPatient().getId().equalsIgnoreCase(patientId))
                 .collect(Collectors.toList());
     }
 
     public List<Appointment> getAppointmentsByDoctor(String doctorId) {
-        return appointments.values().stream()
+        return appointmentStore.getAll().stream()
                 .filter(a -> a.getDoctor() != null && a.getDoctor().getId().equalsIgnoreCase(doctorId))
                 .collect(Collectors.toList());
     }
 
     public List<Appointment> getAppointmentsByStatus(AppointmentStatus status) {
-        return appointments.values().stream()
+        return appointmentStore.getAll().stream()
                 .filter(a -> a.getStatus() == status)
                 .collect(Collectors.toList());
     }
@@ -118,7 +122,7 @@ public class AppointmentService {
     }
 
     public Map<Doctor, Long> getAppointmentsPerDoctor() {
-        return appointments.values().stream()
+        return appointmentStore.getAll().stream()
                 .filter(a -> a.getDoctor() != null)
                 .collect(Collectors.groupingBy(Appointment::getDoctor, Collectors.counting()));
     }
