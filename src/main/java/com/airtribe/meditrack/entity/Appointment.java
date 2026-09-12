@@ -2,7 +2,7 @@ package com.airtribe.meditrack.entity;
 
 import java.time.LocalDateTime;
 
-public class Appointment implements Cloneable {
+public class Appointment extends MedicalEntity implements Cloneable {
     private String appointmentId;
     private Patient patient;
     private Doctor doctor;
@@ -10,8 +10,9 @@ public class Appointment implements Cloneable {
     private LocalDateTime appointmentDate;
     private String notes;
 
-    Appointment(String appointmentId, Patient patient, Doctor doctor, AppointmentStatus appointmentStatus,
+    public Appointment(String appointmentId, Patient patient, Doctor doctor, AppointmentStatus appointmentStatus,
             LocalDateTime appointmentDate, String notes) {
+        super(appointmentId, LocalDateTime.now());
         this.appointmentId = appointmentId;
         this.patient = patient;
         this.doctor = doctor;
@@ -24,6 +25,10 @@ public class Appointment implements Cloneable {
         return appointmentId;
     }
 
+    public String getId() {
+        return appointmentId;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -33,6 +38,10 @@ public class Appointment implements Cloneable {
     }
 
     public AppointmentStatus getAppointmentStatus() {
+        return appointmentStatus;
+    }
+
+    public AppointmentStatus getStatus() {
         return appointmentStatus;
     }
 
@@ -69,9 +78,10 @@ public class Appointment implements Cloneable {
     }
 
     public String getDetails() {
-        return "Appointment ID: " + appointmentId + ", Patient: " + patient.getName() + ", Doctor: " + doctor.getName()
-                + ", Appointment Status: " + appointmentStatus + ", Appointment Date: " + appointmentDate + ", Notes: "
-                + notes;
+        return "Appointment ID: " + appointmentId + ", Patient: " + (patient != null ? patient.getName() : "N/A")
+                + ", Doctor: " + (doctor != null ? doctor.getName() : "N/A")
+                + ", Appointment Status: " + appointmentStatus + ", Appointment Date: " + appointmentDate
+                + ", Notes: " + notes;
     }
 
     public void cancel() {
@@ -90,13 +100,12 @@ public class Appointment implements Cloneable {
         }
     }
 
+    @Override
     public Appointment clone() {
         try {
             return (Appointment) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(e);
         }
-
     }
-
 }

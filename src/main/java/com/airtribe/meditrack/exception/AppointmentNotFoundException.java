@@ -1,5 +1,7 @@
 package com.airtribe.meditrack.exception;
 
-public class AppointmentNotFoundException {
-
+public class AppointmentNotFoundException extends RuntimeException {
+    public AppointmentNotFoundException(String message) {
+        super(message);
+    }
 }

@@ -13,6 +13,9 @@ public class Patient extends Person implements Searchable, Cloneable {
     public Patient(String id, LocalDateTime createdAt, String name, int age, String phone, String email,
             List<String> medicalHistory, String emergencyContact, String bloodGroup) {
         super(id, createdAt, name, age, phone, email);
+        this.medicalHistory = medicalHistory;
+        this.emergencyContact = emergencyContact;
+        this.bloodGroup = bloodGroup;
     }
 
     public List<String> getMedicalHistory() {
