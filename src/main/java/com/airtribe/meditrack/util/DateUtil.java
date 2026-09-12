@@ -8,29 +8,45 @@ public class DateUtil {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static LocalDate parseDate(String dateStr) {
-        if (dateStr == null || dateStr.trim().isEmpty()) {
+    public static LocalDate parseDate(String date) {
+        if (date == null || date.trim().isEmpty()) {
             return null;
         }
-        return LocalDate.parse(dateStr.trim(), DATE_FORMATTER);
+        return LocalDate.parse(date.trim(), DATE_FORMATTER);
     }
 
-    public static LocalDateTime parseDateTime(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.trim().isEmpty()) {
+    public static LocalDateTime parseDateTime(String dateTime) {
+        if (dateTime == null || dateTime.trim().isEmpty()) {
             return null;
         }
-        return LocalDateTime.parse(dateTimeStr.trim(), DATE_TIME_FORMATTER);
+        return LocalDateTime.parse(dateTime.trim(), DATE_TIME_FORMATTER);
     }
 
     public static String formatDate(LocalDate date) {
-        return date != null ? date.format(DATE_FORMATTER) : "";
+        if (date == null) {
+            return "";
+        }
+        return date.format(DATE_FORMATTER);
     }
 
     public static String formatDateTime(LocalDateTime dateTime) {
-        return dateTime != null ? dateTime.format(DATE_TIME_FORMATTER) : "";
+        if (dateTime == null) {
+            return "";
+        }
+        return dateTime.format(DATE_TIME_FORMATTER);
+    }
+
+    public static boolean isPastDate(LocalDate date) {
+        if (date == null) {
+            return false;
+        }
+        return date.isBefore(LocalDate.now());
     }
 
     public static boolean isPast(LocalDateTime dateTime) {
-        return dateTime != null && dateTime.isBefore(LocalDateTime.now());
+        if (dateTime == null) {
+            return false;
+        }
+        return dateTime.isBefore(LocalDateTime.now());
     }
 }

@@ -52,7 +52,10 @@ public abstract class Person extends MedicalEntity {
     }
 
     public boolean validate() {
-        return Validator.validateName(name) && Validator.validatePhone(phone) && Validator.validateEmail(email);
+        return Validator.validateName(name)
+                && Validator.validateAge(age)
+                && Validator.validatePhone(phone)
+                && Validator.validateEmail(email);
     }
 
     public String getDetails() {
