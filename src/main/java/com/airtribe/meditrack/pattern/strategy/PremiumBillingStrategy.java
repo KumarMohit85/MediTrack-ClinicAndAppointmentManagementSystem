@@ -5,7 +5,7 @@ import com.airtribe.meditrack.entity.Appointment;
 
 public class PremiumBillingStrategy implements BillingStrategy {
 
-    private final double premiumCharge = 500;
+    private final double premiumCharge = Constants.PREMIUM_CHARGE;
 
     @Override
     public double calculateAmount(Appointment appointment) {

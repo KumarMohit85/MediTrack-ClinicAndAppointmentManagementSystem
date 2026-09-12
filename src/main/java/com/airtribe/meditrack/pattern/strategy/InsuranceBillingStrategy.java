@@ -5,7 +5,7 @@ import com.airtribe.meditrack.entity.Appointment;
 
 public class InsuranceBillingStrategy implements BillingStrategy {
 
-    private final double insuranceCoverage = 0.20;
+    private final double insuranceCoverage = Constants.INSURANCE_COVERAGE;
 
     @Override
     public double calculateAmount(Appointment appointment) {
